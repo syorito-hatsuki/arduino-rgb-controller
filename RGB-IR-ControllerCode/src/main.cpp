@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include <HatsuRGB/HatsuRGB.h>
+#include <../lib/HatsuRGB/HatsuRGB.h>
+#include <../lib/HatsuIR/HatsuIR.h>
 
 /* Color Keys */
 #define COLOR_RED 0xFF906F
@@ -31,16 +32,32 @@
 #define EFFECT_FLASH 0xFFD827
 #define EFFECT_SMOOTH 0xFFC837
 
+#define DEBUG 0
+
 /* IO Pins */
 
-#define IR_RECEIVE_PIN 7
+#define IR_RECEIVE_PIN 2
+
+HatsuIR ir;
 
 void setup()
 {
     Serial.begin(115200);
+    ir.setPin(IR_RECEIVE_PIN);
+#if DEBUG == 1
+    Serial.print("IR connected to pin: ");
+    Serial.println(ir.getPin());
+#endif
 }
 
 void loop()
 {
-   
+    uint32_t data = ir.getResult();
+    if (ir.getResult() != data)
+    {
+#if DEBUG == 1
+        Serial.print("Result is: ");
+        Serial.println(data, HEX);
+#endif
+    }
 }
