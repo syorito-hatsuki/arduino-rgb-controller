@@ -141,9 +141,9 @@ F 3 "http://www.mouser.com/pdfdocs/Gravitech_Arduino_Nano3_0.pdf" H 1550 6550 50
 $EndComp
 Text GLabel 1050 6950 0    50   Output ~ 0
 RED_PIN
-Text GLabel 1050 6850 0    50   Output ~ 0
-GREEN_PIN
 Text GLabel 1050 7050 0    50   Output ~ 0
+GREEN_PIN
+Text GLabel 1050 6850 0    50   Output ~ 0
 BLUE_PIN
 Text GLabel 2500 7250 3    50   Input ~ 0
 GREEN_PIN
