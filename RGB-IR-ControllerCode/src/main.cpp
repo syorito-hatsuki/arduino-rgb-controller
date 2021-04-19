@@ -39,11 +39,13 @@
 #define IR_RECEIVE_PIN 2
 
 HatsuIR ir;
+HatsuRGB rgb;
 
 void setup()
 {
     Serial.begin(115200);
     ir.setPin(IR_RECEIVE_PIN);
+    rgb.setPins(9, 11, 10);
 #if DEBUG == 1
     Serial.print("IR connected to pin: ");
     Serial.println(ir.getPin());
@@ -55,9 +57,15 @@ void loop()
     uint32_t data = ir.getResult();
     if (ir.getResult() != data)
     {
-#if DEBUG == 1
+        #if DEBUG == 1
         Serial.print("Result is: ");
         Serial.println(data, HEX);
-#endif
+        #endif
     }
+    rgb.setColorRGB(255, 0, 0);
+    delay(1000);
+    rgb.setColorRGB(0, 255, 0);
+    delay(1000);
+    rgb.setColorRGB(0, 0, 255);
+    delay(1000);
 }
