@@ -40,6 +40,9 @@
 
 HatsuIR ir;
 HatsuRGB rgb;
+uint32_t current = 0xFFD02F;
+
+void recive();
 
 void setup()
 {
@@ -48,24 +51,107 @@ void setup()
     rgb.setPins(9, 11, 10);
 #if DEBUG == 1
     Serial.print("IR connected to pin: ");
-    Serial.println(ir.getPin());
+    Serial.println(ir.getIrPin());
 #endif
+    attachInterrupt(0, recive, FALLING);
 }
 
-void loop()
+void loop() {}
+
+void recive()
 {
-    uint32_t data = ir.getResult();
-    if (ir.getResult() != data)
+    current = ir.getResult();
+    if (ir.getResult() != current)
     {
-        #if DEBUG == 1
-        Serial.print("Result is: ");
-        Serial.println(data, HEX);
-        #endif
+        if (current == 0)
+        {
+            Serial.println("Zero");
+        }
+        else
+        {
+            Serial.print("Current result: ");
+            Serial.println(current, HEX);
+        }
     }
-    rgb.setColorRGB(255, 0, 0);
-    delay(1000);
-    rgb.setColorRGB(0, 255, 0);
-    delay(1000);
-    rgb.setColorRGB(0, 0, 255);
-    delay(1000);
+
+    switch (current)
+    {
+        /* Function keys */
+    case FUNCTION_PLUS:
+
+        break;
+    case FUNCTION_MINUS:
+
+        break;
+    case FUNCTION_OFF:
+        rgb.setColorRGB(0, 0, 0);
+        break;
+    case FUNCTION_ON:
+
+        break;
+
+        /* Color keys */
+    case COLOR_WHITE:
+        rgb.setColorRGB(255, 255, 255);
+        break;
+    case COLOR_RED:
+        rgb.setColorRGB(255, 0, 0);
+        break;
+    case COLOR_DARK_ORANGE:
+
+        break;
+    case COLOR_ORANGE:
+
+        break;
+    case COLOR_LIGHT_ORANGE:
+
+        break;
+    case COLOR_YELLOW:
+
+        break;
+    case COLOR_GREEN:
+        rgb.setColorRGB(0, 255, 0);
+        break;
+    case COLOR_LIGHT_GREEN:
+
+        break;
+    case COLOR_CYAN:
+
+        break;
+    case COLOR_TEAL:
+
+        break;
+    case COLOR_OCEAN:
+
+        break;
+    case COLOR_BLUE:
+        rgb.setColorRGB(0, 0, 255);
+        break;
+    case COLOR_LIGHT_BLUE:
+
+        break;
+    case COLOR_PURPLE:
+
+        break;
+    case COLOR_VIOLET:
+
+        break;
+    case COLOR_PINK:
+
+        break;
+
+        /* Effect keys */
+    case EFFECT_FADE:
+
+        break;
+    case EFFECT_STROBE:
+
+        break;
+    case EFFECT_FLASH:
+
+        break;
+    case EFFECT_SMOOTH:
+
+        break;
+    }
 }
