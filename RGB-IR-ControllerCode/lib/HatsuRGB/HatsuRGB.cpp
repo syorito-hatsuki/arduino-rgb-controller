@@ -1,4 +1,35 @@
 #include <HatsuRGB.h>
+#include <EEPROM.h>
+
+byte speed = 100;
+
+void HatsuRGB::enable()
+{
+    setColorRGB(EEPROM.read(0), EEPROM.read(1), EEPROM.read(2));
+}
+
+void HatsuRGB::disable()
+{
+    saveEEPROM();
+    setColorRGB(0, 0, 0);
+}
+
+uint32_t HatsuRGB::addSpeed(uint32_t currentMode){
+    if (speed + 20 < 255)
+    {
+        speed += 20;
+        EEPROM.write(4, speed);
+    }
+    return currentMode;
+}
+uint32_t HatsuRGB::subtractSpeed(uint32_t currentMode){
+    if (speed - 20 > 0)
+    {
+        speed -= 20;
+        EEPROM.write(4, speed);
+    }
+    return currentMode;
+}
 
 void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
 {
@@ -11,7 +42,7 @@ void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
     pinMode(bluePin, INPUT);
 }
 
-void HatsuRGB::setColorRGB(byte red, byte green, byte blue)
+void HatsuRGB::setColorRGB(uint8_t red, uint8_t green, uint8_t blue)
 {
     HatsuRGB::red = red;
     HatsuRGB::green = green;
@@ -20,4 +51,32 @@ void HatsuRGB::setColorRGB(byte red, byte green, byte blue)
     analogWrite(redPin, red);
     analogWrite(greenPin, green);
     analogWrite(bluePin, blue);
+}
+
+void HatsuRGB::saveEEPROM(){
+    EEPROM.write(0, HatsuRGB::red);
+    EEPROM.write(1, HatsuRGB::green);
+    EEPROM.write(2, HatsuRGB::blue);
+}
+
+void HatsuRGB::fadeEffect(){
+    speed = EEPROM.read(4);
+    setColorRGB(255, 0, 0);
+    delay(speed);
+    setColorRGB(0, 255, 0);
+    delay(speed);
+    setColorRGB(0, 0, 255);
+    delay(speed);
+}
+
+void HatsuRGB::strokeEffect(){
+
+}
+
+void HatsuRGB::flashEffect(){
+
+}
+
+void HatsuRGB::smoothEffect(){
+
 }

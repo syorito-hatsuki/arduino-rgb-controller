@@ -1,6 +1,6 @@
 #include <HatsuIR.h>
 
-void HatsuIR::setPin(int pin)
+void HatsuIR::setPin(uint8_t pin)
 {
     ir_pin = pin;
     pinMode(pin, INPUT);
@@ -38,8 +38,11 @@ uint32_t HatsuIR::getResult()
                 } //Vastaanoton loppu
                 return receivedData;
             }
-            else
-                return 0;
         }
     }
+    return 0;
+}
+
+void HatsuIR::setPreviousResult(uint32_t value){
+    HatsuIR::prevIRData = value;
 }

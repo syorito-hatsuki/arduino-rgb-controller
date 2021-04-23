@@ -32,31 +32,117 @@
 #define EFFECT_FLASH 0xFFD827
 #define EFFECT_SMOOTH 0xFFC837
 
-#define DEBUG 0
-
 /* IO Pins */
 
 #define IR_RECEIVE_PIN 2
 
 HatsuIR ir;
 HatsuRGB rgb;
-uint32_t current = 0xFFD02F;
+uint32_t current;
+volatile uint32_t correctData;
 
 void recive();
 
 void setup()
 {
     Serial.begin(115200);
+
     ir.setPin(IR_RECEIVE_PIN);
     rgb.setPins(9, 11, 10);
-#if DEBUG == 1
-    Serial.print("IR connected to pin: ");
-    Serial.println(ir.getIrPin());
-#endif
+
     attachInterrupt(0, recive, FALLING);
 }
 
-void loop() {}
+void loop()
+{
+
+        Serial.print("Correct in switch: ");
+        Serial.println(current);
+    switch (correctData)
+    {
+        /* Function keys */
+    case FUNCTION_PLUS:
+        correctData = rgb.addSpeed(ir.getPreviousResult());
+        break;
+    case FUNCTION_MINUS:
+        correctData = rgb.subtractSpeed(ir.getPreviousResult());
+        break;
+    case FUNCTION_OFF:
+        rgb.disable();
+        break;
+    case FUNCTION_ON:
+        rgb.enable();
+        break;
+
+        /* Color keys */
+    case COLOR_WHITE:
+        rgb.setColorRGB(255, 255, 255);
+        break;
+    case COLOR_RED:
+        rgb.setColorRGB(255, 0, 0);
+        break;
+    case COLOR_DARK_ORANGE:
+        rgb.setColorRGB(255, 64, 0);
+        break;
+    case COLOR_ORANGE:
+        rgb.setColorRGB(255, 127, 0);
+        break;
+    case COLOR_LIGHT_ORANGE:
+        rgb.setColorRGB(255, 194, 0);
+        break;
+    case COLOR_YELLOW:
+        rgb.setColorRGB(255, 255, 0);
+        break;
+    case COLOR_GREEN:
+        rgb.setColorRGB(0, 255, 0);
+        break;
+    case COLOR_LIGHT_GREEN:
+        rgb.setColorRGB(64, 255, 0);
+        break;
+    case COLOR_CYAN:
+        rgb.setColorRGB(0, 255, 255);
+        break;
+    case COLOR_TEAL:
+        rgb.setColorRGB(0, 194, 255);
+        break;
+    case COLOR_OCEAN:
+        rgb.setColorRGB(0, 127, 255);
+        break;
+    case COLOR_BLUE:
+        rgb.setColorRGB(0, 0, 255);
+        break;
+    case COLOR_LIGHT_BLUE:
+        rgb.setColorRGB(0, 64, 255);
+        break;
+    case COLOR_PURPLE:
+        rgb.setColorRGB(127, 0, 255);
+        break;
+    case COLOR_VIOLET:
+        rgb.setColorRGB(255, 0, 255);
+        break;
+    case COLOR_PINK:
+        rgb.setColorRGB(255, 77, 189);
+        break;
+
+        /* Effect keys */
+    case EFFECT_FADE:
+        ir.setPreviousResult(current);
+        rgb.fadeEffect();
+        break;
+    case EFFECT_STROBE:
+        ir.setPreviousResult(current);
+        rgb.strokeEffect();
+        break;
+    case EFFECT_FLASH:
+        ir.setPreviousResult(current);
+        rgb.flashEffect();
+        break;
+    case EFFECT_SMOOTH:
+        ir.setPreviousResult(current);
+        rgb.smoothEffect();
+        break;
+    }
+}
 
 void recive()
 {
@@ -71,87 +157,7 @@ void recive()
         {
             Serial.print("Current result: ");
             Serial.println(current, HEX);
+            correctData = current;
         }
-    }
-
-    switch (current)
-    {
-        /* Function keys */
-    case FUNCTION_PLUS:
-
-        break;
-    case FUNCTION_MINUS:
-
-        break;
-    case FUNCTION_OFF:
-        rgb.setColorRGB(0, 0, 0);
-        break;
-    case FUNCTION_ON:
-
-        break;
-
-        /* Color keys */
-    case COLOR_WHITE:
-        rgb.setColorRGB(255, 255, 255);
-        break;
-    case COLOR_RED:
-        rgb.setColorRGB(255, 0, 0);
-        break;
-    case COLOR_DARK_ORANGE:
-
-        break;
-    case COLOR_ORANGE:
-
-        break;
-    case COLOR_LIGHT_ORANGE:
-
-        break;
-    case COLOR_YELLOW:
-
-        break;
-    case COLOR_GREEN:
-        rgb.setColorRGB(0, 255, 0);
-        break;
-    case COLOR_LIGHT_GREEN:
-
-        break;
-    case COLOR_CYAN:
-
-        break;
-    case COLOR_TEAL:
-
-        break;
-    case COLOR_OCEAN:
-
-        break;
-    case COLOR_BLUE:
-        rgb.setColorRGB(0, 0, 255);
-        break;
-    case COLOR_LIGHT_BLUE:
-
-        break;
-    case COLOR_PURPLE:
-
-        break;
-    case COLOR_VIOLET:
-
-        break;
-    case COLOR_PINK:
-
-        break;
-
-        /* Effect keys */
-    case EFFECT_FADE:
-
-        break;
-    case EFFECT_STROBE:
-
-        break;
-    case EFFECT_FLASH:
-
-        break;
-    case EFFECT_SMOOTH:
-
-        break;
     }
 }
