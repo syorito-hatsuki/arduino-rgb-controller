@@ -61,12 +61,14 @@ void loop() {
         /* Function keys */
     case FUNCTION_PLUS: 
         if (currentMode != 0) { 
-            correctData = rgb.addSpeed(currentMode);
+            rgb.addSpeed();
+            correctData = currentMode;
             break;
         }
     case FUNCTION_MINUS:
         if (currentMode != 0) {
-            correctData = rgb.subtractSpeed(currentMode);
+            rgb.subtractSpeed();
+            correctData = currentMode;
             break;
         }
     case FUNCTION_OFF:

@@ -1,15 +1,17 @@
 #pragma once
 #include <Arduino.h>
 
+
 class HatsuRGB {
     uint8_t red, green, blue;
     uint8_t redPin, greenPin, bluePin;
+    uint8_t speed;
 
 public:
     void enable();                                //Вкл
     void disable();                               //Выкл
-    uint32_t addSpeed(uint32_t currentMode);      //Прибавить скорость
-    uint32_t subtractSpeed(uint32_t currentMode); //Убавить скорость
+    void addSpeed();      //Прибавить скорость
+    void subtractSpeed(); //Убавить скорость
     bool isEnabled();                             //Включено?
 
     void saveEEPROM(); //Сохранение настроек

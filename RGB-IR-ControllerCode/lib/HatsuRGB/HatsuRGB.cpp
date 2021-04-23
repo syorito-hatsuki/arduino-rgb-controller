@@ -1,8 +1,6 @@
 #include <HatsuRGB.h>
 #include <EEPROM.h>
 
-byte speed = 100;
-
 void HatsuRGB::enable()
 {
     setColorRGB(EEPROM.read(0), EEPROM.read(1), EEPROM.read(2));
@@ -14,21 +12,18 @@ void HatsuRGB::disable()
     setColorRGB(0, 0, 0);
 }
 
-uint32_t HatsuRGB::addSpeed(uint32_t currentMode){
-    if (speed + 20 < 255)
-    {
+void HatsuRGB::addSpeed(){
+    if (speed + 20 < 255) {
         speed += 20;
         EEPROM.write(4, speed);
     }
-    return currentMode;
 }
-uint32_t HatsuRGB::subtractSpeed(uint32_t currentMode){
-    if (speed - 20 > 0)
-    {
+
+void HatsuRGB::subtractSpeed(){
+    if (speed - 20 > 0) {
         speed -= 20;
         EEPROM.write(4, speed);
     }
-    return currentMode;
 }
 
 void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
