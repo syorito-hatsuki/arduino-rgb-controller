@@ -36,13 +36,10 @@ uint32_t HatsuIR::getResult()
                         receivedData |= 0;
                     }
                 } //Vastaanoton loppu
+                HatsuIR::prevIRData = receivedData;
                 return receivedData;
             }
         }
     }
     return 0;
-}
-
-void HatsuIR::setPreviousResult(uint32_t value){
-    HatsuIR::prevIRData = value;
 }

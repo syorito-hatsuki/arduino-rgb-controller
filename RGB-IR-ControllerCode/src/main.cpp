@@ -40,11 +40,11 @@ HatsuIR ir;
 HatsuRGB rgb;
 uint32_t current;
 volatile uint32_t correctData;
+volatile uint32_t currentMode = NULL;
 
 void recive();
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
 
     ir.setPin(IR_RECEIVE_PIN);
@@ -53,20 +53,22 @@ void setup()
     attachInterrupt(0, recive, FALLING);
 }
 
-void loop()
-{
+void loop() {
 
-        Serial.print("Correct in switch: ");
-        Serial.println(current);
-    switch (correctData)
-    {
+    Serial.print("Correct in switch: ");
+    Serial.println(current);
+    switch (correctData) {
         /* Function keys */
-    case FUNCTION_PLUS:
-        correctData = rgb.addSpeed(ir.getPreviousResult());
-        break;
+    case FUNCTION_PLUS: 
+        if (currentMode != NULL) { 
+            correctData = rgb.addSpeed(currentMode);
+            break;
+        }
     case FUNCTION_MINUS:
-        correctData = rgb.subtractSpeed(ir.getPreviousResult());
-        break;
+        if (currentMode != NULL) {
+            correctData = rgb.subtractSpeed(currentMode);
+            break;
+        }
     case FUNCTION_OFF:
         rgb.disable();
         break;
@@ -126,38 +128,32 @@ void loop()
 
         /* Effect keys */
     case EFFECT_FADE:
-        ir.setPreviousResult(current);
+        currentMode = current;
         rgb.fadeEffect();
         break;
-    case EFFECT_STROBE:
-        ir.setPreviousResult(current);
+    case EFFECT_STROBE://
+        currentMode = current;
         rgb.strokeEffect();
         break;
     case EFFECT_FLASH:
-        ir.setPreviousResult(current);
+        currentMode = current;
         rgb.flashEffect();
         break;
     case EFFECT_SMOOTH:
-        ir.setPreviousResult(current);
+        currentMode = current;
         rgb.smoothEffect();
         break;
     }
 }
 
-void recive()
-{
-    current = ir.getResult();
-    if (ir.getResult() != current)
-    {
-        if (current == 0)
-        {
+void recive() {
+    if (ir.getPreviousResult() != ir.getResult()) {
+        if (ir.getPreviousResult() == 0)
             Serial.println("Zero");
-        }
-        else
-        {
+        else {
             Serial.print("Current result: ");
-            Serial.println(current, HEX);
-            correctData = current;
+            Serial.println(ir.getPreviousResult(), HEX);
+            correctData = ir.getPreviousResult();
         }
     }
 }

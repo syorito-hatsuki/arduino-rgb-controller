@@ -1,10 +1,7 @@
-#ifndef HatsuRGB_h
-#define HatsuRGB_h
+#pragma once
 #include <Arduino.h>
 
-class HatsuRGB
-{
-private:
+class HatsuRGB {
     uint8_t red, green, blue;
     uint8_t redPin, greenPin, bluePin;
 
@@ -33,5 +30,3 @@ public:
     uint8_t getGreenPin() { return greenPin; };
     uint8_t getBluePin() { return bluePin; };
 };
-
-#endif
