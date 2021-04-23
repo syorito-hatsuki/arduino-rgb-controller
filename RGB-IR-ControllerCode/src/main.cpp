@@ -64,19 +64,15 @@ void loop() {
             rgb.addSpeed();
             switch (currentMode) {
                 case EFFECT_FADE:
-                    currentMode = current;
                     rgb.fadeEffect();
                     break;
                 case EFFECT_STROBE://
-                    currentMode = current;
                     rgb.strokeEffect();
                     break;
                 case EFFECT_FLASH:
-                    currentMode = current;
                     rgb.flashEffect();
                     break;
                 case EFFECT_SMOOTH:
-                    currentMode = current;
                     rgb.smoothEffect();
                     break;
             }
@@ -87,19 +83,15 @@ void loop() {
             rgb.subtractSpeed();
             switch (currentMode) {
                 case EFFECT_FADE:
-                    currentMode = current;
                     rgb.fadeEffect();
                     break;
                 case EFFECT_STROBE://
-                    currentMode = current;
                     rgb.strokeEffect();
                     break;
                 case EFFECT_FLASH:
-                    currentMode = current;
                     rgb.flashEffect();
                     break;
                 case EFFECT_SMOOTH:
-                    currentMode = current;
                     rgb.smoothEffect();
                     break;
             }
