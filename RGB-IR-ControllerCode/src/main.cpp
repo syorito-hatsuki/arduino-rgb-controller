@@ -62,20 +62,20 @@ void loop() {
     case FUNCTION_PLUS: 
         if (currentMode != 0) { 
             rgb.addSpeed();
-            switch (currentMode) {
-                case EFFECT_FADE:
-                    rgb.fadeEffect();
-                    break;
-                case EFFECT_STROBE://
-                    rgb.strokeEffect();
-                    break;
-                case EFFECT_FLASH:
-                    rgb.flashEffect();
-                    break;
-                case EFFECT_SMOOTH:
-                    rgb.smoothEffect();
-                    break;
-            }
+            //switch (currentMode) {
+            //    case EFFECT_FADE:
+            rgb.fadeEffect();
+            //        break;
+            //    case EFFECT_STROBE://
+            //        rgb.strokeEffect();
+            //        break;
+            //    case EFFECT_FLASH:
+            //        rgb.flashEffect();
+            //        break;
+            //    case EFFECT_SMOOTH:
+            //        rgb.smoothEffect();
+            //        break;
+            //}
             break;
         }
     case FUNCTION_MINUS:
