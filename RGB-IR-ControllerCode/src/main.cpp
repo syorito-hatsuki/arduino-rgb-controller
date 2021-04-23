@@ -49,7 +49,7 @@ void setup() {
 
     ir.setPin(IR_RECEIVE_PIN);
     rgb.setPins(9, 11, 10);
-
+    rgb.initializeSpeed();
     attachInterrupt(0, recive, FALLING);
 }
 
@@ -62,13 +62,47 @@ void loop() {
     case FUNCTION_PLUS: 
         if (currentMode != 0) { 
             rgb.addSpeed();
-            correctData = currentMode;
+            switch (currentMode) {
+                case EFFECT_FADE:
+                    currentMode = current;
+                    rgb.fadeEffect();
+                    break;
+                case EFFECT_STROBE://
+                    currentMode = current;
+                    rgb.strokeEffect();
+                    break;
+                case EFFECT_FLASH:
+                    currentMode = current;
+                    rgb.flashEffect();
+                    break;
+                case EFFECT_SMOOTH:
+                    currentMode = current;
+                    rgb.smoothEffect();
+                    break;
+            }
             break;
         }
     case FUNCTION_MINUS:
         if (currentMode != 0) {
             rgb.subtractSpeed();
-            correctData = currentMode;
+            switch (currentMode) {
+                case EFFECT_FADE:
+                    currentMode = current;
+                    rgb.fadeEffect();
+                    break;
+                case EFFECT_STROBE://
+                    currentMode = current;
+                    rgb.strokeEffect();
+                    break;
+                case EFFECT_FLASH:
+                    currentMode = current;
+                    rgb.flashEffect();
+                    break;
+                case EFFECT_SMOOTH:
+                    currentMode = current;
+                    rgb.smoothEffect();
+                    break;
+            }
             break;
         }
     case FUNCTION_OFF:

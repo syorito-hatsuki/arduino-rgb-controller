@@ -1,5 +1,4 @@
 #include <HatsuRGB.h>
-#include <EEPROM.h>
 
 void HatsuRGB::enable()
 {
@@ -13,6 +12,7 @@ void HatsuRGB::disable()
 }
 
 void HatsuRGB::addSpeed(){
+    uint8_t speed = EEPROM.read(4);
     if (speed + 20 < 255) {
         speed += 20;
         EEPROM.write(4, speed);
@@ -20,6 +20,7 @@ void HatsuRGB::addSpeed(){
 }
 
 void HatsuRGB::subtractSpeed(){
+    uint8_t speed = EEPROM.read(4);
     if (speed - 20 > 0) {
         speed -= 20;
         EEPROM.write(4, speed);
@@ -55,7 +56,7 @@ void HatsuRGB::saveEEPROM(){
 }
 
 void HatsuRGB::fadeEffect(){
-    speed = EEPROM.read(4);
+    uint8_t speed = EEPROM.read(4);
     setColorRGB(255, 0, 0);
     delay(speed);
     setColorRGB(0, 255, 0);
