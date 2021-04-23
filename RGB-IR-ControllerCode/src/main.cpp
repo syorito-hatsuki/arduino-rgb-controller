@@ -40,7 +40,7 @@ HatsuIR ir;
 HatsuRGB rgb;
 uint32_t current;
 volatile uint32_t correctData;
-volatile uint32_t currentMode = NULL;
+volatile uint32_t currentMode;
 
 void recive();
 
@@ -60,12 +60,12 @@ void loop() {
     switch (correctData) {
         /* Function keys */
     case FUNCTION_PLUS: 
-        if (currentMode != NULL) { 
+        if (currentMode != 0) { 
             correctData = rgb.addSpeed(currentMode);
             break;
         }
     case FUNCTION_MINUS:
-        if (currentMode != NULL) {
+        if (currentMode != 0) {
             correctData = rgb.subtractSpeed(currentMode);
             break;
         }
