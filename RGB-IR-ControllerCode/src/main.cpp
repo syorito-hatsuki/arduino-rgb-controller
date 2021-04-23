@@ -38,13 +38,13 @@
 
 HatsuIR ir;
 HatsuRGB rgb;
-uint32_t current;
 volatile uint32_t correctData;
 volatile uint32_t currentMode;
 
 void recive();
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     ir.setPin(IR_RECEIVE_PIN);
@@ -53,52 +53,64 @@ void setup() {
     attachInterrupt(0, recive, FALLING);
 }
 
-void loop() {
+void loop()
+{
 
-    Serial.print("Correct in switch: ");
-    Serial.println(current);
-    switch (correctData) {
+    // Serial.print("Correct in switch: ");
+    // Serial.println(currentMode);
+    switch (correctData)
+    {
         /* Function keys */
-    case FUNCTION_PLUS: 
-        if (currentMode != 0) { 
-            rgb.addSpeed();
-            //switch (currentMode) {
-            //    case EFFECT_FADE:
-            rgb.fadeEffect();
-            //        break;
-            //    case EFFECT_STROBE://
-            //        rgb.strokeEffect();
-            //        break;
-            //    case EFFECT_FLASH:
-            //        rgb.flashEffect();
-            //        break;
-            //    case EFFECT_SMOOTH:
-            //        rgb.smoothEffect();
-            //        break;
-            //}
-            break;
-        }
+    case FUNCTION_PLUS:
+
+        rgb.addSpeed();
+        //switch (currentMode) {
+        //    case EFFECT_FADE:
+        rgb.fadeEffect();
+        //        break;
+        //    case EFFECT_STROBE://
+        //        rgb.strokeEffect();
+        //        break;
+        //    case EFFECT_FLASH:
+        //        rgb.flashEffect();
+        //        break;
+        //    case EFFECT_SMOOTH:
+        //        rgb.smoothEffect();
+        //        break;
+        //}
+        Serial.print("Plus is: ");
+        Serial.println(EEPROM.read(4));
+        break;
+
     case FUNCTION_MINUS:
-        if (currentMode != 0) {
+        // if (currentMode != 0)
+        // {
             rgb.subtractSpeed();
-            switch (currentMode) {
-                case EFFECT_FADE:
-                    rgb.fadeEffect();
-                    break;
-                case EFFECT_STROBE://
-                    rgb.strokeEffect();
-                    break;
-                case EFFECT_FLASH:
-                    rgb.flashEffect();
-                    break;
-                case EFFECT_SMOOTH:
-                    rgb.smoothEffect();
-                    break;
+            switch (currentMode)
+            {
+            case EFFECT_FADE:
+                rgb.fadeEffect();
+                break;
+            case EFFECT_STROBE: //
+                rgb.strokeEffect();
+                break;
+            case EFFECT_FLASH:
+                rgb.flashEffect();
+                break;
+            case EFFECT_SMOOTH:
+                rgb.smoothEffect();
+                break;
             }
-            break;
-        }
+        // }
+        Serial.print("Minus is: ");
+        Serial.println(EEPROM.read(4));
+        Serial.println(currentMode, HEX);
+        correctData = currentMode;
+        Serial.println(correctData, HEX);
+        break;
     case FUNCTION_OFF:
-        rgb.disable();
+        // rgb.disable();
+        Serial.println("");
         break;
     case FUNCTION_ON:
         rgb.enable();
@@ -156,32 +168,39 @@ void loop() {
 
         /* Effect keys */
     case EFFECT_FADE:
-        currentMode = current;
+        currentMode = correctData;
         rgb.fadeEffect();
         break;
-    case EFFECT_STROBE://
-        currentMode = current;
+    case EFFECT_STROBE: //
+        currentMode = correctData;
         rgb.strokeEffect();
         break;
     case EFFECT_FLASH:
-        currentMode = current;
+        currentMode = correctData;
         rgb.flashEffect();
         break;
     case EFFECT_SMOOTH:
-        currentMode = current;
+        currentMode = correctData;
         rgb.smoothEffect();
         break;
     }
 }
 
-void recive() {
-    if (ir.getPreviousResult() != ir.getResult()) {
-        if (ir.getPreviousResult() == 0)
-            Serial.println("Zero");
-        else {
-            Serial.print("Current result: ");
-            Serial.println(ir.getPreviousResult(), HEX);
-            correctData = ir.getPreviousResult();
+void recive()
+{
+    auto i = ir.getResult();
+    if (ir.getResult() != i)
+    {
+        if (ir.getPreviousResult() != ir.getResult())
+        {
+            if (ir.getPreviousResult() == 0)
+                Serial.println("Zero");
+            else
+            {
+                Serial.print("Current result: ");
+                Serial.println(ir.getPreviousResult(), HEX);
+                correctData = ir.getPreviousResult();
+            }
         }
     }
 }
