@@ -1,17 +1,15 @@
 #include <HatsuRGB.h>
 
-void HatsuRGB::enable()
-{
+void HatsuRGB::enable() {
     setColorRGB(EEPROM.read(0), EEPROM.read(1), EEPROM.read(2));
 }
 
-void HatsuRGB::disable()
-{
+void HatsuRGB::disable() {
     saveEEPROM();
     setColorRGB(0, 0, 0);
 }
 
-void HatsuRGB::addSpeed(){
+void HatsuRGB::addSpeed() {
     uint8_t speed = EEPROM.read(4);
     if (speed + 20 < 255) {
         speed += 20;
@@ -19,7 +17,7 @@ void HatsuRGB::addSpeed(){
     }
 }
 
-void HatsuRGB::subtractSpeed(){
+void HatsuRGB::subtractSpeed() {
     uint8_t speed = EEPROM.read(4);
     if (speed - 20 > 0) {
         speed -= 20;
@@ -27,8 +25,7 @@ void HatsuRGB::subtractSpeed(){
     }
 }
 
-void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
-{
+void HatsuRGB::setPins(int redPin, int greenPin, int bluePin) {
     HatsuRGB::redPin = redPin;
     HatsuRGB::greenPin = greenPin;
     HatsuRGB::bluePin = bluePin;
@@ -38,8 +35,7 @@ void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
     pinMode(bluePin, INPUT);
 }
 
-void HatsuRGB::setColorRGB(uint8_t red, uint8_t green, uint8_t blue)
-{
+void HatsuRGB::setColorRGB(uint8_t red, uint8_t green, uint8_t blue) {
     HatsuRGB::red = red;
     HatsuRGB::green = green;
     HatsuRGB::blue = blue;
@@ -49,13 +45,13 @@ void HatsuRGB::setColorRGB(uint8_t red, uint8_t green, uint8_t blue)
     analogWrite(bluePin, blue);
 }
 
-void HatsuRGB::saveEEPROM(){
+void HatsuRGB::saveEEPROM() {
     EEPROM.write(0, HatsuRGB::red);
     EEPROM.write(1, HatsuRGB::green);
     EEPROM.write(2, HatsuRGB::blue);
 }
 
-void HatsuRGB::fadeEffect(){
+void HatsuRGB::fadeEffect() {
     uint8_t speed = EEPROM.read(4);
     setColorRGB(255, 0, 0);
     delay(speed);
@@ -65,14 +61,14 @@ void HatsuRGB::fadeEffect(){
     delay(speed);
 }
 
-void HatsuRGB::strokeEffect(){
+void HatsuRGB::strokeEffect() {
 
 }
 
-void HatsuRGB::flashEffect(){
+void HatsuRGB::flashEffect() {
 
 }
 
-void HatsuRGB::smoothEffect(){
+void HatsuRGB::smoothEffect() {
 
 }
