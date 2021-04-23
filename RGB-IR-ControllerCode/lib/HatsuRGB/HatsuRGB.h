@@ -6,19 +6,14 @@ class HatsuRGB {
     uint8_t redPin, greenPin, bluePin;
 
 public:
-    void enable();                                //Вкл
-    void disable();                               //Выкл
     void addSpeed();      //Прибавить скорость
     void subtractSpeed(); //Убавить скорость
-    bool isEnabled();                             //Включено?
 
-    void saveEEPROM(); //Сохранение настроек
-
-    void setPins(int redPin, int greenPin, int bluePin);        //Установка пинов
+    void setPins(uint8_t redPin, uint8_t greenPin, uint8_t bluePin);        //Установка пинов
     void setColorRGB(uint8_t red, uint8_t green, uint8_t blue); //Установка цвета RGB
 
     void fadeEffect();
-    void strokeEffect();
+    void strobeEffect();
     void flashEffect();
     void smoothEffect();
 

@@ -1,25 +1,20 @@
 #include <HatsuRGB.h>
 #include <EEPROM.h>
 
-uint8_t speed = 100;
+#define MAX_SPEED 1000
+#define MIN_SPEED 0
+#define SPEED_STEP 20
 
-void HatsuRGB::enable()
-{
-    setColorRGB(EEPROM.read(0), EEPROM.read(1), EEPROM.read(2));
-}
-
-void HatsuRGB::disable()
-{
-    saveEEPROM();
-    setColorRGB(0, 0, 0);
-}
+uint8_t speed;
+uint32_t Rvalue = 254, Gvalue = 1, Bvalue = 127;
+uint32_t Rdirection = -1, Gdirection = 1, Bdirection = -1;
 
 void HatsuRGB::addSpeed()
 {
     speed = EEPROM.read(4);
-    if (speed - 20 > 0)
+    if (speed - SPEED_STEP > MIN_SPEED)
     {
-        speed -= 20;
+        speed -= SPEED_STEP;
         EEPROM.write(4, speed);
     }
 }
@@ -27,18 +22,21 @@ void HatsuRGB::addSpeed()
 void HatsuRGB::subtractSpeed()
 {
     speed = EEPROM.read(4);
-    if (speed + 20 < 255)
+    if (speed + SPEED_STEP < MAX_SPEED)
     {
-        speed += 20;
+        speed += SPEED_STEP;
         EEPROM.write(4, speed);
     }
 }
 
-void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
+void HatsuRGB::setPins(uint8_t redPin, uint8_t greenPin, uint8_t bluePin)
 {
     HatsuRGB::redPin = redPin;
     HatsuRGB::greenPin = greenPin;
     HatsuRGB::bluePin = bluePin;
+
+    srand(A0);
+    speed = EEPROM.read(4);
 
     pinMode(redPin, INPUT);
     pinMode(greenPin, INPUT);
@@ -47,20 +45,16 @@ void HatsuRGB::setPins(int redPin, int greenPin, int bluePin)
 
 void HatsuRGB::setColorRGB(uint8_t red, uint8_t green, uint8_t blue)
 {
-    HatsuRGB::red = red;
-    HatsuRGB::green = green;
-    HatsuRGB::blue = blue;
+    if (red != 0 && green != 0 && blue != 0)
+    {
+        HatsuRGB::red = red;
+        HatsuRGB::green = green;
+        HatsuRGB::blue = blue;
+    }
 
     analogWrite(redPin, red);
     analogWrite(greenPin, green);
     analogWrite(bluePin, blue);
-}
-
-void HatsuRGB::saveEEPROM()
-{
-    EEPROM.write(0, HatsuRGB::red);
-    EEPROM.write(1, HatsuRGB::green);
-    EEPROM.write(2, HatsuRGB::blue);
 }
 
 void HatsuRGB::fadeEffect()
@@ -73,14 +67,41 @@ void HatsuRGB::fadeEffect()
     delay(speed);
 }
 
-void HatsuRGB::strokeEffect()
+void HatsuRGB::strobeEffect()
 {
+    setColorRGB(1 + (rand() % 255), 1 + (rand() % 255), 1 + (rand() % 255));
+    delay(speed);
 }
 
 void HatsuRGB::flashEffect()
 {
+    setColorRGB(255, 255, 255);
+    delay(speed);
+    setColorRGB(0, 0, 0);
+    delay(speed);
 }
 
 void HatsuRGB::smoothEffect()
 {
+
+    setColorRGB(Rvalue, Gvalue, Bvalue);
+
+    Rvalue = Rvalue + Rdirection; //changing values of LEDs
+    Gvalue = Gvalue + Gdirection;
+    Bvalue = Bvalue + Bdirection;
+
+    //now change direction for each color if it reaches 255
+    if (Rvalue >= 255 || Rvalue <= 0)
+    {
+        Rdirection = Rdirection * -1;
+    }
+    if (Gvalue >= 255 || Gvalue <= 0)
+    {
+        Gdirection = Rdirection * -1;
+    }
+    if (Bvalue >= 255 || Bvalue <= 0)
+    {
+        Bdirection = Bdirection * -1;
+    }
+    delay(speed / 10); //give some delay so you can see the change
 }
