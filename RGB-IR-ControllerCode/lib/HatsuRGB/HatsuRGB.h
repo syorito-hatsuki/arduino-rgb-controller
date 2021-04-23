@@ -1,13 +1,11 @@
 #pragma once
 #include <Arduino.h>
-#include <EEPROM.h>
 
 class HatsuRGB {
     uint8_t red, green, blue;
     uint8_t redPin, greenPin, bluePin;
 
 public:
-    void initializeSpeed() { EEPROM.write(4, 100); };
     void enable();                                //Вкл
     void disable();                               //Выкл
     void addSpeed();      //Прибавить скорость

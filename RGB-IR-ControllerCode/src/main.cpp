@@ -43,18 +43,18 @@ volatile uint32_t currentMode;
 
 void recive();
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
-
     ir.setPin(IR_RECEIVE_PIN);
     rgb.setPins(9, 11, 10);
-    rgb.initializeSpeed();
     attachInterrupt(0, recive, FALLING);
 }
 
 void loop()
 {
-    switch (correctData) {
+    switch (correctData)
+    {
         /* Function keys */
     case FUNCTION_PLUS:
         rgb.addSpeed();
@@ -66,8 +66,7 @@ void loop()
         correctData = currentMode;
         break;
     case FUNCTION_OFF:
-        // rgb.disable();
-        Serial.println("");
+        rgb.disable();
         break;
     case FUNCTION_ON:
         rgb.enable();
@@ -143,13 +142,16 @@ void loop()
     }
 }
 
-void recive() {
+void recive()
+{
     auto i = ir.getResult();
-    if (ir.getResult() != i) {
-        
+    if (ir.getResult() != i)
+    {
+
         if (ir.getPreviousResult() == 0)
             Serial.println("Zero");
-        else {
+        else
+        {
             Serial.print("Current result: ");
             Serial.println(ir.getPreviousResult(), HEX);
             correctData = ir.getPreviousResult();
