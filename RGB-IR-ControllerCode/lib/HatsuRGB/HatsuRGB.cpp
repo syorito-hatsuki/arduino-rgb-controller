@@ -2,30 +2,34 @@
 #include <EEPROM.h>
 
 #define MAX_SPEED 1000
-#define MIN_SPEED 0
-#define SPEED_STEP 20
+#define MIN_SPEED 100
+#define SPEED_STEP 100
 
-uint8_t speed;
+uint16_t speed = 100;
 uint32_t Rvalue = 254, Gvalue = 1, Bvalue = 127;
 uint32_t Rdirection = -1, Gdirection = 1, Bdirection = -1;
 
 void HatsuRGB::addSpeed()
 {
-    speed = EEPROM.read(4);
+    EEPROM.get(4, speed);
     if (speed - SPEED_STEP > MIN_SPEED)
     {
         speed -= SPEED_STEP;
-        EEPROM.write(4, speed);
+        EEPROM.put(4, speed);
+    } else {
+        speed = MIN_SPEED;
     }
 }
 
 void HatsuRGB::subtractSpeed()
 {
-    speed = EEPROM.read(4);
+    EEPROM.get(4, speed);
     if (speed + SPEED_STEP < MAX_SPEED)
     {
         speed += SPEED_STEP;
-        EEPROM.write(4, speed);
+        EEPROM.put(4, speed);
+    } else {
+        speed = MAX_SPEED;
     }
 }
 
@@ -36,7 +40,7 @@ void HatsuRGB::setPins(uint8_t redPin, uint8_t greenPin, uint8_t bluePin)
     HatsuRGB::bluePin = bluePin;
 
     srand(A0);
-    speed = EEPROM.read(4);
+    EEPROM.get(4, speed);
 
     pinMode(redPin, INPUT);
     pinMode(greenPin, INPUT);
@@ -61,10 +65,20 @@ void HatsuRGB::fadeEffect()
 {
     setColorRGB(255, 0, 0);
     delay(speed);
+    setColorRGB(255, 255, 0);
+    delay(speed);
     setColorRGB(0, 255, 0);
+    delay(speed);
+    setColorRGB(0, 255, 255);
     delay(speed);
     setColorRGB(0, 0, 255);
     delay(speed);
+    setColorRGB(255, 0, 255);
+    delay(speed);
+
+
+    Serial.print("effect speed is: ");
+    Serial.println(speed);
 }
 
 void HatsuRGB::strobeEffect()

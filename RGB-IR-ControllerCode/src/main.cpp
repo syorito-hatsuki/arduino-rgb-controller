@@ -45,7 +45,6 @@ void recive();
 
 void setup()
 {
-    Serial.begin(115200);
     ir.setPin(IR_RECEIVE_PIN);
     rgb.setPins(9, 11, 10);
     attachInterrupt(0, recive, FALLING);
